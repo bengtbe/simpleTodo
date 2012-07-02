@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
 </head>
 <body>
-	<h1>Todo skrives her</h1>	
+	<h1>Todo liste</h1>	
 	<script type="text/javascript">
 	$(function(){
 		$.ajax({
