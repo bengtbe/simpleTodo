@@ -4,11 +4,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>SimpleTodo - Et nyttig verktøy :)</title>
+	<title>SimpleTodo - Et nyttig verktï¿½y :)</title>
 	<script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
 </head>
 <body>
-	<h1>Todo liste fylles inn her</h1>	
+	<h1>Todo liste er her</h1>	
 	<script type="text/javascript">
 	$(function(){
 		$.ajax({
