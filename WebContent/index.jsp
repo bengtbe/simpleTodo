@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
 </head>
 <body>
-	Hei hei hei	
+	<h1>Todo</h1>	
 	<script type="text/javascript">
 	$(function(){
 		$.ajax({
