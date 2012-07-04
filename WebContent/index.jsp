@@ -39,7 +39,18 @@
 				url : "rest/todos",
 				dataType : "json",
 				success : function(data, textStatus, jqXHR) {
-					console.log(data);
+					for (i in data)
+                    {
+                        var $clone = $('.todo-template').clone();
+                        $clone.removeClass('todo-template').addClass('todo');
+                        $clone.children('.todo-text').text(data[i].summary);
+                        if (data[i].isDone)
+                        {
+                            $clone.children('input[type=checkbox]').attr('checked', true);
+                        }
+                        $clone.appendTo('.todos').show();
+                    }
+
 				}
 			});
 
