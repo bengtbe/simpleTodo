@@ -12,10 +12,10 @@ public enum TodoDao {
 
 	private TodoDao() {
 
-		Todo todo = new Todo("1", "Learn REST");
+		Todo todo = new Todo("1", "Learn REST", true);
 		todo.setDescription("Read http://www.vogella.com/articles/REST/article.html");
 		contentProvider.put(todo.getId(), todo);
-		todo = new Todo("2", "Do something");
+		todo = new Todo("2", "Do something", false);
 		todo.setDescription("Read complete http://www.vogella.com");
 		contentProvider.put(todo.getId(), todo);
 

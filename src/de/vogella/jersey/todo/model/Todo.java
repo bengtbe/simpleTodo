@@ -8,15 +8,17 @@ public class Todo {
 	private String id;
 	private String summary;
 	private String description;
+	private boolean isDone;
 
 	public Todo(){
 		
 	}
 	
-	public Todo(String id, String summary) {
+	public Todo(String id, String summary, boolean isDone) {
 		super();
 		this.id = id;
 		this.summary = summary;
+		this.isDone = isDone;
 	}
 	
 	public String getId() {
@@ -36,6 +38,14 @@ public class Todo {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(boolean isDone) {
+		this.isDone = isDone;
 	}
 	
 
