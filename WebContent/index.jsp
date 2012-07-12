@@ -21,18 +21,19 @@
 		</div>
 		<div class="todos">
 			<div class="todo-template" style="display: none">
-				<input type='checkbox' /><span class="todo-text"></span>
+				<input type='checkbox' class="todo_status" />
+				<span class="todo-text"></span>
+				<span class="todo_id" style="display:none"></span>
+				<span class="todo_description" style="display:none"></span>
 			</div>
 		</div>
-
-
-
 	</div>
 
 	<footer> </footer>
 
 	<script type="text/javascript">
 		$(function() {
+			
 			$.ajax({
 				url : "rest/todos",
 				dataType : "json",
@@ -42,6 +43,8 @@
                         var $clone = $('.todo-template').clone();
                         $clone.removeClass('todo-template').addClass('todo');
                         $clone.children('.todo-text').text(data[i].summary);
+                        $clone.children('.todo_id').text(data[i].id);
+                        $clone.children('.todo_description').text(data[i].description);
                         if (data[i].isDone)
                         {
                             $clone.children('input[type=checkbox]').attr('checked', true);
@@ -51,8 +54,52 @@
 
 				}
 			});
-
+			
+		    $(document).on('change', '.todo_status', function(){
+		    	
+				alert("Hei");
+				var thisCheck = $(this);
+				if (thisCheck.is(':checked')){
+					thisCheck = true;
+				} else {
+					thisCheck = false;
+				}
+				
+				var todoText = $(this).siblings('span.todo-text').text();
+				var todoId =   $(this).siblings('span.todo_id').text();
+				var todoDescription =   $(this).siblings('span.todo_description').text();
+				
+				$.ajax({
+					
+					url: "rest/todos" + "/" + todoId,
+					contentType: "application/json",
+					type: "PUT",
+					data: '{"id":"' + todoId +'","summary":"' + todoText + '","description":"' + todoDescription +'", "isDone":"'+ thisCheck + '"}',
+					success: function (data){
+						console.log(data);
+					}
+				});
+			});
+		}); 
+	
+	function addTodo(){
+		
+		var todoText = $('.new_todo').val();
+		$.ajax({
+			url: "rest/todos",
+			contentType: "application/json",
+			type: "POST",
+			data: '{"summary":"' + todoText + '"}',
+			success: function(data, textStatus, jqXHR){
+				console.log(data);
+			}
 		});
+	}
+	
+	
+		
 	</script>
+	
+		
 </body>
 </html>

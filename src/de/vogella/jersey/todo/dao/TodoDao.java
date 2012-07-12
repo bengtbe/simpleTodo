@@ -24,5 +24,13 @@ public enum TodoDao {
 	public Map<String, Todo> getTodos() {
 		return contentProvider;
 	}
+	
+	public void updateTodo (Todo todo){
+		Todo updateTodo = contentProvider.get(todo.getId());
+		updateTodo.setDescription(todo.getDescription());
+		updateTodo.setSummary(todo.getSummary());
+		updateTodo.setIsDone(todo.getIsDone());
+		contentProvider.put(updateTodo.getId(), updateTodo);
+	}
 
 }

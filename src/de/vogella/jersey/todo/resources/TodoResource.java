@@ -60,5 +60,12 @@ public class TodoResource {
 		if (c == null)
 			throw new RuntimeException("Delete: Todo with " + id + " not found");
 	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)	
+	public Response updateTodo(Todo todo){
+		TodoDao.instance.updateTodo(todo);
+		return Response.ok().build();
+	}
 
 }

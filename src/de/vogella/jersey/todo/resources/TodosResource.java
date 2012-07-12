@@ -85,7 +85,8 @@ public class TodosResource {
 		if (TodoDao.instance.getTodos().containsKey(todo.getId())) {
 			res = Response.noContent().build();
 		} else {
-			res = Response.created(uriInfo.getAbsolutePath()).build();
+			//res = Response.created(uriInfo.getAbsolutePath()).build();
+			res = Response.created(uriInfo.getAbsolutePath()).entity(todo).build();
 		}
 		TodoDao.instance.getTodos().put(todo.getId(), todo);
 		return res;
