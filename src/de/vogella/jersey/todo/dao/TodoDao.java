@@ -32,5 +32,11 @@ public enum TodoDao {
 		updateTodo.setIsDone(todo.getIsDone());
 		contentProvider.put(updateTodo.getId(), updateTodo);
 	}
+	
+	public void addTodo(Todo todo){
+		String newId = new Integer (contentProvider.size() + 1).toString();
+		todo.setId(newId);
+		contentProvider.put(todo.getId(), todo);
+	}
 
 }

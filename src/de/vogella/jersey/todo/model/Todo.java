@@ -9,6 +9,7 @@ public class Todo {
 	private String summary;
 	private String description;
 	private boolean isDone;
+	private boolean isDeleted;
 
 	public Todo(){
 		
@@ -19,6 +20,7 @@ public class Todo {
 		this.id = id;
 		this.summary = summary;
 		this.isDone = isDone;
+		this.isDeleted = false;
 	}
 	
 	public String getId() {
@@ -46,6 +48,14 @@ public class Todo {
 
 	public void setIsDone(boolean isDone) {
 		this.isDone = isDone;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 

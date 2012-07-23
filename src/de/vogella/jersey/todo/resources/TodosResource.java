@@ -79,16 +79,20 @@ public class TodosResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response newTodo(Todo todo) {
 		//Todo c = todo.getValue();
+		
 		Response res;
+		
 		if (TodoDao.instance.getTodos().containsKey(todo.getId())) {
 			res = Response.noContent().build();
 		} else {
 			//res = Response.created(uriInfo.getAbsolutePath()).build();
 			res = Response.created(uriInfo.getAbsolutePath()).entity(todo).build();
 		}
-		TodoDao.instance.getTodos().put(todo.getId(), todo);
+		
+		TodoDao.instance.addTodo(todo);
 		return res;
 	}
 	
