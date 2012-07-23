@@ -1,12 +1,11 @@
 package de.vogella.jersey.todo.resources;
 
-import java.io.IOException;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -95,6 +94,17 @@ public class TodosResource {
 		TodoDao.instance.addTodo(todo);
 		return res;
 	}
+	
+	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void deleteTodos(String [] ids)
+	{
+		for (String id: ids){
+			TodoDao.instance.deleteTodo(id);
+		}
+	}
+	
 	
 	// Defines that the next path parameter after todos is
 	// treated as a parameter and passed to the TodoResources

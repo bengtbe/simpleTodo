@@ -123,7 +123,8 @@
 			});
 		    
 		    $(document).on('click', '#delete_checked', function(){
-		    	var checkedTodoIds = $("INPUT[type='checkbox']").filter(':checked').siblings('.todo_id');
+		    	var checkedTodos = $("INPUT[type='checkbox']").filter(':checked');
+		    	var checkedTodoIds = checkedTodos.siblings('.todo_id');
 		    	
 		    	var ids = checkedTodoIds.map(function() {
 		    	    return $(this).text();
@@ -136,7 +137,16 @@
 		    		type: "DELETE",
 		    		data: JSON.stringify(ids),
 		    		success: function(data){
-		    			console.log(data);
+		    			checkedTodos.each(function(){
+		    				$(this).parent().remove();
+		    			});
+		    			
+		    			if ($("INPUT[type='checkbox']").is(':checked')){
+							$('#delete_checked').show();	
+						}
+						else {
+							$('#delete_checked').hide();
+						}	
 		    		}
 		    	});
 		    });

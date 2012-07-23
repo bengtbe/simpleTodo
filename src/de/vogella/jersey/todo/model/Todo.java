@@ -15,9 +15,8 @@ public class Todo {
 		
 	}
 	
-	public Todo(String id, String summary, boolean isDone) {
+	public Todo(String summary, boolean isDone) {
 		super();
-		this.id = id;
 		this.summary = summary;
 		this.isDone = isDone;
 		this.isDeleted = false;

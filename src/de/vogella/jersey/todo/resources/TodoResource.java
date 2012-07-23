@@ -56,9 +56,9 @@ public class TodoResource {
 
 	@DELETE
 	public void deleteTodo() {
-		Todo c = TodoDao.instance.getTodos().remove(id);
-		if (c == null)
-			throw new RuntimeException("Delete: Todo with " + id + " not found");
+		TodoDao.instance.deleteTodo(id);
+//		if (c == null)
+//			throw new RuntimeException("Delete: Todo with " + id + " not found");
 	}
 	
 	@PUT

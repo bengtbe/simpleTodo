@@ -9,15 +9,16 @@ public enum TodoDao {
 	instance;
 
 	private Map<String, Todo> contentProvider = new HashMap<String, Todo>();
-
+	private int nextId = 1;
+	
 	private TodoDao() {
 
-		Todo todo = new Todo("1", "Learn REST", true);
+		Todo todo = new Todo("Learn REST", true);
 		todo.setDescription("Read http://www.vogella.com/articles/REST/article.html");
-		contentProvider.put(todo.getId(), todo);
-		todo = new Todo("2", "Do something", false);
+		addTodo(todo);
+		todo = new Todo("Do something", false);
 		todo.setDescription("Read complete http://www.vogella.com");
-		contentProvider.put(todo.getId(), todo);
+		addTodo(todo);
 
 	}
 
@@ -34,9 +35,14 @@ public enum TodoDao {
 	}
 	
 	public void addTodo(Todo todo){
-		String newId = new Integer (contentProvider.size() + 1).toString();
-		todo.setId(newId);
+		
+		todo.setId(String.valueOf(nextId++));
 		contentProvider.put(todo.getId(), todo);
+	}
+
+	public void deleteTodo(String id) {
+		contentProvider.remove(id);
+		
 	}
 
 }
