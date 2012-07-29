@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SimpleTodo - Et nyttig verktøy :)</title>
+<title>SimpleTodo - Et enkelt verktøy :)</title>
 <script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
 
 </head>
@@ -141,7 +141,7 @@
 		    				$(this).parent().remove();
 		    			});
 		    			
-		    			if ($("INPUT[type='checkbox']").is(':checked')){
+		    			if($("INPUT[type='checkbox']").is(':checked')){
 							$('#delete-checked').show();	
 						}
 						else {
