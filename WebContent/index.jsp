@@ -59,10 +59,8 @@
                         
                         
                     }
-					
-					if ($('.todo-status').is(':checked')){
-						$('#delete-checked').show();
-					}
+		
+					toggleDeleteChecked();
 				}
 			});
 			
@@ -86,15 +84,11 @@
 					data: '{"id":"' + todoId +'","summary":"' + todoText + '","description":"' + todoDescription +'", "isDone":"'+ thisCheck + '"}',
 					success: function (data){
 						console.log(data);
+						toggleDeleteChecked()
 					}
 				});
 				
-				if ($("INPUT[type='checkbox']").is(':checked')){
-					$('#delete-checked').show();	
-				}
-				else {
-					$('#delete-checked').hide();
-				}
+				
 			});
 		    
 		    
@@ -110,12 +104,7 @@
 					success: function (data){
 						$(todo).remove();
 						
-						if ($("INPUT[type='checkbox']").is(':checked')){
-							$('#delete-checked').show();	
-						}
-						else {
-							$('#delete-checked').hide();
-						}
+						toggleDeleteChecked();
 					}
 				});
 				
@@ -141,12 +130,7 @@
 		    				$(this).parent().remove();
 		    			});
 		    			
-		    			if($("INPUT[type='checkbox']").is(':checked')){
-							$('#delete-checked').show();	
-						}
-						else {
-							$('#delete-checked').hide();
-						}	
+		    			toggleDeleteChecked();
 		    		}
 		    	});
 		    });
@@ -177,6 +161,15 @@
 	}
 	
 	
+	function toggleDeleteChecked(){
+		
+		if($("INPUT[type='checkbox']").is(':checked')){
+			$('#delete-checked').show();	
+		}
+		else {
+			$('#delete-checked').hide();
+		}	
+	}
 		
 	</script>
 	
