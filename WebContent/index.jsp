@@ -13,24 +13,24 @@
 		<h1>Todo liste er her igjen</h1>
 	</header>
 	<div>
-		<div id="top_nav"></div>
-		<div id="top_border"></div>
+		<div id="top-nav"></div>
+		<div id="top-border"></div>
 
-		<div class="add_todo">
-			<input type='text' class="new_todo" />
+		<div class="add-todo">
+			<input type='text' class="new-todo" />
 			<input type='button' onclick="addTodo()" value='Legg til' />
 		</div>
 		<div class="todos">
 			<div class="todo-template" style="display: none">
-				<input type='checkbox' class="todo_status" />
+				<input type='checkbox' class="todo-status" />
 				<span class="todo-text"></span>
-				<span class="todo_id" style="display:none"></span>
-				<span class="todo_description" style="display:none"></span>
-				<input type='button' class="delete_todo" value='Fjern'/>
+				<span class="todo-id" style="display:none"></span>
+				<span class="todo-description" style="display:none"></span>
+				<input type='button' class="delete-todo" value='Fjern'/>
 			</div>
 		</div>
         <div>
-        	<input type="button" id="delete_checked" value="Fjern utførte" style="display:none" />
+        	<input type="button" id="delete-checked" value="Fjern utførte" style="display:none" />
         </div> 
 	</div>
 
@@ -48,8 +48,8 @@
                         var $clone = $('.todo-template').clone();
                         $clone.removeClass('todo-template').addClass('todo');
                         $clone.children('.todo-text').text(data[i].summary);
-                        $clone.children('.todo_id').text(data[i].id);
-                        $clone.children('.todo_description').text(data[i].description);
+                        $clone.children('.todo-id').text(data[i].id);
+                        $clone.children('.todo-description').text(data[i].description);
                         if (data[i].isDone)
                         {
                             $clone.children('input[type=checkbox]').attr('checked', true);
@@ -60,13 +60,13 @@
                         
                     }
 					
-					if ($('.todo_status').is(':checked')){
-						$('#delete_checked').show();
+					if ($('.todo-status').is(':checked')){
+						$('#delete-checked').show();
 					}
 				}
 			});
 			
-		    $(document).on('change', '.todo_status', function(){
+		    $(document).on('change', '.todo-status', function(){
 				var thisCheck = $(this);
 				if (thisCheck.is(':checked')){
 					thisCheck = true;
@@ -75,8 +75,8 @@
 				}
 				
 				var todoText = $(this).siblings('span.todo-text').text();
-				var todoId =   $(this).siblings('span.todo_id').text();
-				var todoDescription =   $(this).siblings('span.todo_description').text();
+				var todoId =   $(this).siblings('span.todo-id').text();
+				var todoDescription =   $(this).siblings('span.todo-description').text();
 				
 				$.ajax({
 					
@@ -90,16 +90,16 @@
 				});
 				
 				if ($("INPUT[type='checkbox']").is(':checked')){
-					$('#delete_checked').show();	
+					$('#delete-checked').show();	
 				}
 				else {
-					$('#delete_checked').hide();
+					$('#delete-checked').hide();
 				}
 			});
 		    
 		    
-		    $(document).on('click', '.delete_todo', function(){
-				var todoId = $(this).siblings('.todo_id').text();
+		    $(document).on('click', '.delete-todo', function(){
+				var todoId = $(this).siblings('.todo-id').text();
 				var todo = $(this).parent();
 				$.ajax({
 					
@@ -111,10 +111,10 @@
 						$(todo).remove();
 						
 						if ($("INPUT[type='checkbox']").is(':checked')){
-							$('#delete_checked').show();	
+							$('#delete-checked').show();	
 						}
 						else {
-							$('#delete_checked').hide();
+							$('#delete-checked').hide();
 						}
 					}
 				});
@@ -122,9 +122,9 @@
 				
 			});
 		    
-		    $(document).on('click', '#delete_checked', function(){
+		    $(document).on('click', '#delete-checked', function(){
 		    	var checkedTodos = $("INPUT[type='checkbox']").filter(':checked');
-		    	var checkedTodoIds = checkedTodos.siblings('.todo_id');
+		    	var checkedTodoIds = checkedTodos.siblings('.todo-id');
 		    	
 		    	var ids = checkedTodoIds.map(function() {
 		    	    return $(this).text();
@@ -142,10 +142,10 @@
 		    			});
 		    			
 		    			if ($("INPUT[type='checkbox']").is(':checked')){
-							$('#delete_checked').show();	
+							$('#delete-checked').show();	
 						}
 						else {
-							$('#delete_checked').hide();
+							$('#delete-checked').hide();
 						}	
 		    		}
 		    	});
@@ -157,7 +157,7 @@
 	
 	function addTodo(){
 		
-		var todoText = $('.new_todo').val();
+		var todoText = $('.new-todo').val();
 		$.ajax({
 			url: "rest/todos",
 			contentType: "application/json",
@@ -167,13 +167,13 @@
 				var $clone = $('.todo-template').clone();
                 $clone.removeClass('todo-template').addClass('todo');
                 $clone.children('.todo-text').text(data.summary);
-                $clone.children('.todo_id').text(data.id);
-                $clone.children('.todo_description').text(data.description);
+                $clone.children('.todo-id').text(data.id);
+                $clone.children('.todo-description').text(data.description);
                 $clone.prependTo('.todos').show();
 			}
 		});
 		
-		$('.new_todo').val('');
+		$('.new-todo').val('');
 	}
 	
 	

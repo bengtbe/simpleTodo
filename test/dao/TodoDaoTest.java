@@ -22,7 +22,7 @@ public class TodoDaoTest {
 	
 	
 	@Test
-	public void delete_OneItemInList_ItShouldBeRemoved() {
+	public void deleteTodo_OneItemInList_ItShouldBeRemoved() {
 
 		Todo todo = addTodo();
 		
