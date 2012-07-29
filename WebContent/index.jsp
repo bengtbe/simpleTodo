@@ -16,9 +16,9 @@
 		<div id="top-nav"></div>
 		<div id="top-border"></div>
 
-		<div class="add-todo">
-			<input type='text' class="new-todo" />
-			<input type='button' onclick="addTodo()" value='Legg til' />
+		<div class="new-todo-container">
+			<input type='text' class="todo-text" />
+			<input type='button' class="add-todo" value='Legg til' />
 		</div>
 		<div class="todos">
 			<div class="todo-template" style="display: none">
@@ -63,6 +63,29 @@
 					toggleDeleteChecked();
 				}
 			});
+			
+			
+			$('input.add-todo').on('click', function (){
+				
+				var todoText = $('.new-todo-container .todo-text').val();
+				$.ajax({
+					url: "rest/todos",
+					contentType: "application/json",
+					type: "POST",
+					data: '{"summary":"' + todoText + '"}',
+					success: function(data, textStatus, jqXHR){
+						var $clone = $('.todo-template').clone();
+		                $clone.removeClass('todo-template').addClass('todo');
+		                $clone.children('.todo-text').text(data.summary);
+		                $clone.children('.todo-id').text(data.id);
+		                $clone.children('.todo-description').text(data.description);
+		                $clone.prependTo('.todos').show();
+					}
+				});
+				
+				$('.new-todo-container .todo-text').val('');
+			});
+			
 			
 		    $(document).on('change', '.todo-status', function(){
 				var thisCheck = $(this);
@@ -135,30 +158,13 @@
 		    	});
 		    });
 		    
+		    
+		    
 		}); 
 		
 		
 	
-	function addTodo(){
-		
-		var todoText = $('.new-todo').val();
-		$.ajax({
-			url: "rest/todos",
-			contentType: "application/json",
-			type: "POST",
-			data: '{"summary":"' + todoText + '"}',
-			success: function(data, textStatus, jqXHR){
-				var $clone = $('.todo-template').clone();
-                $clone.removeClass('todo-template').addClass('todo');
-                $clone.children('.todo-text').text(data.summary);
-                $clone.children('.todo-id').text(data.id);
-                $clone.children('.todo-description').text(data.description);
-                $clone.prependTo('.todos').show();
-			}
-		});
-		
-		$('.new-todo').val('');
-	}
+	
 	
 	
 	function toggleDeleteChecked(){
