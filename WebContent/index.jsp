@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>SimpleTodo - Et nyttig verktøy :)</title>
+<title>SimpleTodo - Et enkelt verktÃ¸y :)</title>
 <script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
 
 </head>
@@ -30,7 +30,7 @@
 			</div>
 		</div>
         <div>
-        	<input type="button" id="delete_checked" value="Fjern utførte" style="display:none" />
+        	<input type="button" id="delete_checked" value="Fjern utfï¿½rte" style="display:none" />
         </div> 
 	</div>
 
@@ -141,7 +141,7 @@
 		    				$(this).parent().remove();
 		    			});
 		    			
-		    			if ($("INPUT[type='checkbox']").is(':checked')){
+		    			if($("INPUT[type='checkbox']").is(':checked')){
 							$('#delete_checked').show();	
 						}
 						else {
