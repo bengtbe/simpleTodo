@@ -19,8 +19,7 @@
 		<div id="top-border"></div>
 
 		<div class="new-todo-container">
-			<input type='text' class="todo-text" /> <input type='button'
-				class="add-todo" value='Legg til' />
+			<input type='text' class="todo-text" />
 		</div>
 		<div class="todos">
 			<div class="todo-template" style="display: none">
@@ -56,21 +55,25 @@
 				}
 			});
 
-			$('input.add-todo').on('click', function() {
+			
+			
+			$('input.todo-text').on('keyup', function(key){
+				if (key.keyCode == 13){
+					var todoText = $('.new-todo-container .todo-text').val();
+					$.ajax({
+						url : "rest/todos",
+						contentType : "application/json",
+						type : "POST",
+						data : '{"summary":"' + todoText + '"}',
+						success : function(data, textStatus, jqXHR) {
 
-				var todoText = $('.new-todo-container .todo-text').val();
-				$.ajax({
-					url : "rest/todos",
-					contentType : "application/json",
-					type : "POST",
-					data : '{"summary":"' + todoText + '"}',
-					success : function(data, textStatus, jqXHR) {
+							cloneTemplateAndCreateTodo(data, true);
+						}
+					});
 
-						cloneTemplateAndCreateTodo(data, true);
-					}
-				});
-
-				$('.new-todo-container .todo-text').val('');
+					$('.new-todo-container .todo-text').val('');
+				}
+				
 			});
 
 			$(document).on(
