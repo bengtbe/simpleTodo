@@ -59,21 +59,25 @@
 			
 			$('input.todo-text').on('keyup', function(key){
 				if (key.keyCode == 13){
-					var todoText = $('.new-todo-container .todo-text').val();
-					$.ajax({
-						url : "rest/todos",
-						contentType : "application/json",
-						type : "POST",
-						data : '{"summary":"' + todoText + '"}',
-						success : function(data, textStatus, jqXHR) {
-
-							cloneTemplateAndCreateTodo(data, true);
-						}
-					});
-
-					$('.new-todo-container .todo-text').val('');
+					
+					if( $(this).val().trim() ){ 
+					
+						var todoText = $(this).val();
+						
+						$.ajax({
+							url : "rest/todos",
+							contentType : "application/json",
+							type : "POST",
+							data : '{"summary":"' + todoText + '"}',
+							success : function(data, textStatus, jqXHR) {
+	
+								cloneTemplateAndCreateTodo(data, true);
+							}
+						});
+	
+						$('.new-todo-container .todo-text').val('');
+					}
 				}
-				
 			});
 
 			$(document).on(
