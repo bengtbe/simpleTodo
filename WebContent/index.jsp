@@ -23,18 +23,17 @@
 		</div>
 		<div class="todos">
 			<div class="todo-template" style="display: none">
-				<div class="todo">
-					<input type='checkbox' class="todo-status" /> <span
-						class="todo-text"></span> <span class="todo-id"
-						style="display: none"></span> <span class="todo-description"
-						style="display: none"></span> <input type='button'
-						class="delete-todo" value='Fjern' />
+				<div class='todo'>
+					<!-- <input type='hidden' class='todo-id'/> -->
+					<input type='checkbox' class='todo-status' /> 
+					<span class='todo-text'></span>
+					<input type='hidden' class='todo-description'/>
+					<input type='button' class='delete-todo' value='Fjern' />
 				</div>
 			</div>
 		</div>
 		<div>
-			<input type="button" id="delete-checked" value="Fjern utførte"
-				style="display: none" />
+			<input type="button" id="delete-checked" value="Fjern utførte" style="display: none" />
 		</div>
 	</div>
 
@@ -48,7 +47,7 @@
 				dataType : "json",
 				success : function(data, textStatus, jqXHR) {
 					for (i in data) {
-						cloneTemplateAndCreateTodo(data[i], false);
+						createTodo(data[i]).appendTo('.todos');
 					}
 
 					toggleDeleteChecked();
@@ -70,59 +69,50 @@
 							type : "POST",
 							data : '{"summary":"' + todoText + '"}',
 							success : function(data, textStatus, jqXHR) {
-	
-								cloneTemplateAndCreateTodo(data, true);
+								createTodo(data).prependTo('.todos');
 							}
 						});
 	
-						$('.new-todo-container .todo-text').val('');
+						
 					}
+					
+					$('.new-todo-container .todo-text').val('');
 				}
 			});
 
-			$(document).on(
-					'change',
-					'.todo-status',
-					function() {
-						var thisCheck = $(this);
-						if (thisCheck.is(':checked')) {
-							thisCheck = true;
-						} else {
-							thisCheck = false;
-						}
+			$(document).on('change', '.todo-status', function() {
+						
+				var $todo = $(this).parents(".todo");
+				var thisCheck = $(this).is(':checked');
+				var $todoText = $(this).siblings('todo-text');
+				var todoId = $todo.data('id'); 
+				var todoDescription = $(this).siblings('.todo-description').text();
 
-						var $todoText = $(this).siblings('span.todo-text');
-						var todoId = $(this).siblings('span.todo-id').text();
-						var todoDescription = $(this).siblings(
-								'span.todo-description').text();
+				$.ajax({
 
-						$.ajax({
+					url : "rest/todos" + "/" + todoId,
+					contentType : "application/json",
+					type : "PUT",
+					data : '{"id":"' + todoId 
+							+ '","summary":"' + $todoText.text() 
+							+ '","description":"' + todoDescription 
+							+ '", "isDone":"' + thisCheck + '"}',
+					success : function(data) {
+						console.log(data);
+						toggleDeleteChecked();
+						
+						$todo.toggleClass("checked-todo", thisCheck);
+						
+					}
+				});
 
-							url : "rest/todos" + "/" + todoId,
-							contentType : "application/json",
-							type : "PUT",
-							data : '{"id":"' + todoId + '","summary":"'
-									+ $todoText.text() + '","description":"'
-									+ todoDescription + '", "isDone":"'
-									+ thisCheck + '"}',
-							success : function(data) {
-								console.log(data);
-								toggleDeleteChecked();
-								
-								if (thisCheck){
-									$todoText.addClass("checked_todo");
-								}else {
-									$todoText.removeClass("checked_todo");
-								}
-								
-							}
-						});
-
-					});
+			});
 
 			$(document).on('click', '.delete-todo', function() {
-				var todoId = $(this).siblings('.todo-id').text();
-				var todo = $(this).parent();
+				
+				var $todo = $(this).parents(".todo");	
+				var todoId = $todo.data('id'); 
+				
 				$.ajax({
 
 					url : "rest/todos" + "/" + todoId,
@@ -130,24 +120,20 @@
 					type : "DELETE",
 					data : '{"id": "' + todoId + '"}',
 					success : function(data) {
-						$(todo).remove();
-
+						$todo.remove();
 						toggleDeleteChecked();
 					}
 				});
 
 			});
 
-			$(document).on(
-					'click',
-					'#delete-checked',
-					function() {
-						var checkedTodos = $("INPUT[type='checkbox']").filter(
-								':checked');
-						var checkedTodoIds = checkedTodos.siblings('.todo-id');
-
-						var ids = checkedTodoIds.map(function() {
-							return $(this).text();
+			$(document).on('click',	'#delete-checked',	function() {
+						var checkedCheckboxes = $("INPUT[type='checkbox']").filter(':checked');
+						
+						var checkedTodos = checkedCheckboxes.parents('.todo');
+						
+						var ids = checkedTodos.map(function() {
+							return $(this).data('id');
 						}).get();
 
 						$.ajax({
@@ -158,7 +144,7 @@
 							data : JSON.stringify(ids),
 							success : function(data) {
 								checkedTodos.each(function() {
-									$(this).parent().remove();
+									$(this).remove();
 								});
 
 								toggleDeleteChecked();
@@ -168,23 +154,20 @@
 
 		});
 
-		function cloneTemplateAndCreateTodo(data, addFirst) {
+		function createTodo(data) {
 
 			var $clone = $($('.todo-template').html());
 
 			$clone.children('.todo-text').text(data.summary);
-			$clone.children('.todo-id').text(data.id);
+			$clone.data('id', data.id);
 			$clone.children('.todo-description').text(data.description);
 
 			if (data.isDone) {
 				$clone.children('input[type=checkbox]').attr('checked', true);
-				$clone.children('.todo-text').addClass("checked_todo");
+				$clone.addClass("checked-todo");
 			}
-			if (addFirst) {
-				$clone.prependTo('.todos');
-			} else {
-				$clone.appendTo('.todos');
-			}
+			
+			return $clone;
 		}
 
 		function toggleDeleteChecked() {

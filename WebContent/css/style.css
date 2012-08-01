@@ -220,7 +220,7 @@ td { vertical-align: top; }
    ========================================================================== */
 
 
-.checked_todo {
+.checked-todo .todo-text {
 	color: #CACFCE;
 	text-decoration:line-through;
 	font-style: italic;
