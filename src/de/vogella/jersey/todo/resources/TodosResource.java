@@ -80,7 +80,6 @@ public class TodosResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response newTodo(Todo todo) {
-		//Todo c = todo.getValue();
 		
 		Response res;
 		
@@ -98,8 +97,10 @@ public class TodosResource {
 	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void deleteTodos(String [] ids)
+	public void deleteTodos(String [] ids) throws Exception
 	{
+		
+		if (true) throw new Exception("En uventet feil oppstod på serveren");
 		for (String id: ids){
 			TodoDao.instance.deleteTodo(id);
 		}

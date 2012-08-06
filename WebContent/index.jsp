@@ -14,10 +14,9 @@
 	<header>
 		<h1>Todo liste er her igjen</h1>
 	</header>
-	<div>
-		<div id="top-nav"></div>
-		<div id="top-border"></div>
-
+	<div class="error-message" style="display:none"></div>
+	<div id="todo-list">
+		<div id="todo-heading"><h2>Siws Todo</h2></div>
 		<div class="new-todo-container">
 			<input type='text' class="todo-text" />
 		</div>
@@ -51,6 +50,7 @@
 					}
 
 					toggleDeleteChecked();
+					$('.error-message').hide();
 				}
 			});
 
@@ -70,7 +70,9 @@
 							data : '{"summary":"' + todoText + '"}',
 							success : function(data, textStatus, jqXHR) {
 								createTodo(data).prependTo('.todos');
+								$('.error-message').hide();
 							}
+							
 						});
 	
 						
@@ -102,7 +104,7 @@
 						toggleDeleteChecked();
 						
 						$todo.toggleClass("checked-todo", thisCheck);
-						
+						$('.error-message').hide();
 					}
 				});
 
@@ -122,6 +124,7 @@
 					success : function(data) {
 						$todo.remove();
 						toggleDeleteChecked();
+						$('.error-message').hide();
 					}
 				});
 
@@ -148,6 +151,11 @@
 								});
 
 								toggleDeleteChecked();
+								$('.error-message').hide();
+								
+							},
+							error: function(jqXHR, textStatus, errorThrown){
+								$('.error-message').text("Det oppstod en feil på serveren").show();
 							}
 						});
 					});
