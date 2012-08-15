@@ -122,9 +122,7 @@
 						
 						var checkedTodos = checkedCheckboxes.parents('.todo');
 						
-						var ids = checkedTodos.map(function() {
-							return $(this).data('id');
-						}).get();
+						var ids = getIds(checkedTodos);
 
 						ajax.removeAll({
 							data : JSON.stringify(ids),
@@ -146,10 +144,7 @@
 					axis: 'y',  
 					containment: '.todos-sortable-container',
 					update: function(){
-						var ids = $(this).find('.todo').map(function() {
-							return $(this).data('id');
-						}).get();
-						
+						var ids = getIds($(this).find('.todo'));
 						ajax.put("sort", {
 							data: JSON.stringify(ids),
 							success: function(data){
@@ -173,6 +168,15 @@
 		
 		
 
+		function getIds (elements){
+			
+			var ids = elements.map(function() {
+				return $(this).data('id');
+			}).get();
+			
+			return ids;
+		}
+		
 		function createTodo(data) {
 
 			var $clone = $($('.todo-template').html());
