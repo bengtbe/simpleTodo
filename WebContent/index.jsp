@@ -8,26 +8,27 @@
 
 <link rel="stylesheet" href="css/style.css">
 <script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-1.8.22.custom.min.js"></script>
+<script type="text/javascript" src="lib/simpletodo.js"></script>
+<script type="text/javascript" src="lib/simpletodo-ajax.js"></script>
 
 </head>
 <body>
-	<header>
-		<h1>Todo liste er her igjen</h1>
-	</header>
 	<div class="error-message" style="display:none"></div>
 	<div id="todo-list">
 		<div id="todo-heading"><h2>Siws Todo</h2></div>
 		<div class="new-todo-container">
 			<input type='text' class="todo-text" />
 		</div>
-		<div class="todos">
-			<div class="todo-template" style="display: none">
-				<div class='todo'>
-					<!-- <input type='hidden' class='todo-id'/> -->
-					<input type='checkbox' class='todo-status' /> 
-					<span class='todo-text'></span>
-					<input type='hidden' class='todo-description'/>
-					<input type='button' class='delete-todo' value='Fjern' />
+		<div class='todos-sortable-container'>
+			<div class='todos'>
+				<div class="todo-template" style="display: none">
+					<div class='todo'>
+						<input type='checkbox' class='todo-status' /> 
+						<span class='todo-text'></span>
+						<input type='hidden' class='todo-description'/>
+						<input type='button' class='delete-todo' value='Fjern' />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -41,20 +42,18 @@
 	<script type="text/javascript">
 		$(function() {
 
-			$.ajax({
-				url : "rest/todos",
-				dataType : "json",
+			ajax.setBaseUrl("rest/todos");
+			
+			ajax.get({
 				success : function(data, textStatus, jqXHR) {
 					for (i in data) {
 						createTodo(data[i]).appendTo('.todos');
 					}
-
+					
 					toggleDeleteChecked();
 					$('.error-message').hide();
 				}
 			});
-
-			
 			
 			$('input.todo-text').on('keyup', function(key){
 				if (key.keyCode == 13){
@@ -63,16 +62,12 @@
 					
 						var todoText = $(this).val();
 						
-						$.ajax({
-							url : "rest/todos",
-							contentType : "application/json",
-							type : "POST",
+						ajax.post({
 							data : '{"summary":"' + todoText + '"}',
 							success : function(data, textStatus, jqXHR) {
-								createTodo(data).prependTo('.todos');
+								createTodo(data).appendTo('.todos');
 								$('.error-message').hide();
 							}
-							
 						});
 	
 						
@@ -86,17 +81,13 @@
 						
 				var $todo = $(this).parents(".todo");
 				var thisCheck = $(this).is(':checked');
-				var $todoText = $(this).siblings('todo-text');
+				var todoText = $todo.find('.todo-text').text();
 				var todoId = $todo.data('id'); 
-				var todoDescription = $(this).siblings('.todo-description').text();
+				var todoDescription = $todo.find('.todo-description').text();
 
-				$.ajax({
-
-					url : "rest/todos" + "/" + todoId,
-					contentType : "application/json",
-					type : "PUT",
+				ajax.put(todoId, {
 					data : '{"id":"' + todoId 
-							+ '","summary":"' + $todoText.text() 
+							+ '","summary":"' + todoText
 							+ '","description":"' + todoDescription 
 							+ '", "isDone":"' + thisCheck + '"}',
 					success : function(data) {
@@ -115,11 +106,7 @@
 				var $todo = $(this).parents(".todo");	
 				var todoId = $todo.data('id'); 
 				
-				$.ajax({
-
-					url : "rest/todos" + "/" + todoId,
-					contentType : "application/json",
-					type : "DELETE",
+				ajax.remove (todoId, {
 					data : '{"id": "' + todoId + '"}',
 					success : function(data) {
 						$todo.remove();
@@ -139,11 +126,7 @@
 							return $(this).data('id');
 						}).get();
 
-						$.ajax({
-
-							url : "rest/todos",
-							contentType : "application/json",
-							type : "DELETE",
+						ajax.removeAll({
 							data : JSON.stringify(ids),
 							success : function(data) {
 								checkedTodos.each(function() {
@@ -154,13 +137,41 @@
 								$('.error-message').hide();
 								
 							},
-							error: function(jqXHR, textStatus, errorThrown){
-								$('.error-message').text("Det oppstod en feil på serveren").show();
-							}
 						});
 					});
+			
+			
+			$(function() {
+				$( ".todos" ).sortable({ 
+					axis: 'y',  
+					containment: '.todos-sortable-container',
+					update: function(){
+						var ids = $(this).find('.todo').map(function() {
+							return $(this).data('id');
+						}).get();
+						
+						ajax.put("sort", {
+							data: JSON.stringify(ids),
+							success: function(data){
+								console.log(data);
+							}
+						});
+						
+					}
+				});
+				//$( ".todos" ).disableSelection();
+			});
+			
+			
+			
+			
+			$(document).on('click', '.todos .todo-text', function(){
+				console.log('Klick klack');
+			});
 
 		});
+		
+		
 
 		function createTodo(data) {
 
@@ -186,6 +197,24 @@
 				$('#delete-checked').hide();
 			}
 		}
+		
+		var doAjax = function(settings){
+			
+			$.ajax({
+				url : settings.url,
+				type: settings.type || "GET",
+				contentType : "application/json",
+				dataType : "json",
+				data: settings.data,
+				success: settings.success,
+				error: function(jqXHR, textStatus, errorThrown){
+					$('.error-message').text("Det oppstod en feil på serveren").show();
+				}
+			});
+		}
+		
+		
+		
 	</script>
 
 

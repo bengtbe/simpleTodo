@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -35,18 +36,16 @@ public class TodosResource {
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public List<Todo> getTodosBrowser() {
-		List<Todo> todos = new ArrayList<Todo>();
-		todos.addAll(TodoDao.instance.getTodos().values());
-		return todos;
+		
+		return TodoDao.instance.getTodos();
 	}
 
 	// Return the list of todos for applications
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Todo> getTodos() {
-		List<Todo> todos = new ArrayList<Todo>();
-		todos.addAll(TodoDao.instance.getTodos().values());
-		return todos;
+		
+		return TodoDao.instance.getTodos();
 	}
 
 	// Returns the number of todos
@@ -83,7 +82,7 @@ public class TodosResource {
 		
 		Response res;
 		
-		if (TodoDao.instance.getTodos().containsKey(todo.getId())) {
+		if (TodoDao.instance.containsTodo(todo.getId())) {
 			res = Response.noContent().build();
 		} else {
 			//res = Response.created(uriInfo.getAbsolutePath()).build();
@@ -94,13 +93,23 @@ public class TodosResource {
 		return res;
 	}
 	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("sort")
+	public void sortTodos(String[] ids){
+		int order = 1;
+		for (String id: ids){
+			Todo todo = TodoDao.instance.getTodo(id);
+			todo.setOrder(order++);
+		}
+	}
+	
 	
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void deleteTodos(String [] ids) throws Exception
 	{
-		
-		if (true) throw new Exception("En uventet feil oppstod på serveren");
+
 		for (String id: ids){
 			TodoDao.instance.deleteTodo(id);
 		}

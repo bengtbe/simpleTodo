@@ -10,6 +10,7 @@ public class Todo {
 	private String description;
 	private boolean isDone;
 	private boolean isDeleted;
+	private int order;
 
 	public Todo(){
 		
@@ -55,6 +56,14 @@ public class Todo {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
 	
 

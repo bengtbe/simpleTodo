@@ -36,7 +36,7 @@ public class TodoResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Todo getTodo() {
-		Todo todo = TodoDao.instance.getTodos().get(id);
+		Todo todo = TodoDao.instance.getTodo(id);
 		if (todo == null) {
 			throw new RuntimeException("Get: Todo with " + id + " not found");
 		}
@@ -47,7 +47,7 @@ public class TodoResource {
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public Todo getTodoHTML() {
-		Todo todo = TodoDao.instance.getTodos().get(id);
+		Todo todo = TodoDao.instance.getTodo(id);
 		if (todo == null)
 			throw new RuntimeException("Get: Todo with " + id + " not found");
 		return todo;
