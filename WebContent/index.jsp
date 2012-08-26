@@ -7,6 +7,7 @@
 <title>SimpleTodo - Et enkelt verktøy :)</title>
 
 <link rel="stylesheet" href="css/style.css">
+<link type="text/css" href="css/jquery-ui-1.8.23.custom.css" rel="Stylesheet" />
 <script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-1.8.22.custom.min.js"></script>
 <script type="text/javascript" src="lib/simpletodo.js"></script>
@@ -36,7 +37,8 @@
 			<input type="button" id="delete-checked" value="Fjern utførte" style="display: none" />
 		</div>
 	</div>
-
+	<div class="dialog" title="Bekreft sletting" style="display: none">Ønsker du å slette alle utførte todos?</div>
+	
 	<footer> </footer>
 
 	<script type="text/javascript">
@@ -118,28 +120,46 @@
 			});
 
 			$(document).on('click',	'#delete-checked',	function() {
-						var checkedCheckboxes = $("INPUT[type='checkbox']").filter(':checked');
 						
-						var checkedTodos = checkedCheckboxes.parents('.todo');
-						
-						var ids = getIds(checkedTodos);
+						$( ".dialog" ).dialog({
+							rezisable: false,
+							height:180,
+							modal: true,
+							buttons: {
+								"Slett todos": function() {
+									
+									var checkedCheckboxes = $("INPUT[type='checkbox']").filter(':checked');
+									var checkedTodos = checkedCheckboxes.parents('.todo');
+									var ids = getIds(checkedTodos);
 
-						ajax.removeAll({
-							data : JSON.stringify(ids),
-							success : function(data) {
-								checkedTodos.each(function() {
-									$(this).remove();
-								});
+									ajax.removeAll({
+										data : JSON.stringify(ids),
+										success : function(data) {
+											checkedTodos.each(function() {
+												$(this).remove();
+											});
 
-								toggleDeleteChecked();
-								$('.error-message').hide();
-								
-							},
+											toggleDeleteChecked();
+											$('.error-message').hide();
+											
+										},
+									});	
+									
+									$( this ).dialog( "close" );
+								},
+								"Cancel": function() {
+									
+									$( this ).dialog( "close" );
+								}
+							}
+							
 						});
+						
+						
 					});
 			
 			
-			$(function() {
+			
 				$( ".todos" ).sortable({ 
 					axis: 'y',  
 					containment: '.todos-sortable-container',
@@ -154,8 +174,9 @@
 						
 					}
 				});
-				//$( ".todos" ).disableSelection();
-			});
+				
+				$('.accordion').accordion();
+			
 			
 			
 			
@@ -202,20 +223,7 @@
 			}
 		}
 		
-		var doAjax = function(settings){
-			
-			$.ajax({
-				url : settings.url,
-				type: settings.type || "GET",
-				contentType : "application/json",
-				dataType : "json",
-				data: settings.data,
-				success: settings.success,
-				error: function(jqXHR, textStatus, errorThrown){
-					$('.error-message').text("Det oppstod en feil på serveren").show();
-				}
-			});
-		}
+
 		
 		
 		
